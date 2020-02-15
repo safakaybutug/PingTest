@@ -25,7 +25,7 @@ th {
 </style>
 "@
 
-$COMPUTER = (gc C:\computers.txt)
+$COMPUTER = (Get-Content C:\computers.txt)
 $User = "sender mail address" 
 $PWord = ConvertTo-SecureString -String "mail pass" -AsPlainText -Force
 $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $User, $PWord
@@ -36,7 +36,7 @@ while($end -eq 0){
     $offlinestr = 'Ulaşılamayan IP Adresleri : ' 
     
    
-        $computer | %{                        
+        $computer | ForEach-Object {                        
                        if (test-Connection -ComputerName $_ -Count 1 -quiet)  
                         {
                              Write-Host "$_ is online"
@@ -57,7 +57,7 @@ while($end -eq 0){
                                     }
                             }
                         }
-                    cls
+                    Clear-Host
                     Start-Sleep 5
                     
                     $Body = $offline | ConvertTo-Html -Head $Header | Out-String
